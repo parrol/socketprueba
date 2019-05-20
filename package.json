@@ -4,7 +4,8 @@
   "description": "pruebas para trabajar con socketio",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,5 @@
     "express": "^4.17.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
-  },
-  "style": "/css/styles.css"
-
+  }
 }
