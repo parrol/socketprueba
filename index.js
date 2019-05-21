@@ -5,8 +5,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 const ipify = require('ipify');
-const customDomain = 'p2prueba'
-//var _ip = require('ip')
+const customDomain = 'p2pruebas'
+var _ip = require('ip')
 
 function getLocalIp(){
     let ip = _ip.address();
@@ -26,6 +26,7 @@ var tunnel = localtunnel(PORT, { subdomain: `${customDomain}` }, (err, tunnel) =
     console.log('}');
     console.log('Abierto el tunel');
     console.log('}');
+    console.log(tunnel)
     tunnel.on('close', () => {
         console.log("Se te cerró, whoops")
     })
@@ -36,13 +37,13 @@ app.use(express.static(__dirname + '/'))
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html')
-    //console.dir(req)
+    console.dir(req)
 });
 
 io.on('connection', function (socket) {
     console.log('nació una araña')
-    //getLocalIp();
-    //getPublicIp();
+    getLocalIp();
+    getPublicIp();
     socket.on('chat message', function (msg) {
         io.emit('chat message', msg)
     })
