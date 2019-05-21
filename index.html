@@ -15,11 +15,21 @@
     </form>
 </body>
 <script src="/socket.io/socket.io.js"></script>
-<script type="module" src="/utility.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     $(function () {
-        var socket = io();
+        var socket = io()
+        var ip;
+
+        function getIp() {
+            $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function (data) {
+                console.log(JSON.stringify(data, null, 2))
+                data = JSON.parse(data)
+                console.log(data.ip)
+                socket.emit('reconocimiento',data)
+                return data
+            });
+        }
         //presiona send y se activa el submit
         $('form').submit(function (e) {
             e.preventDefault(); // prevents page reloading
@@ -27,13 +37,14 @@
             $('#m').val('');
             return false;
         });
+
         socket.on('chat message', function (msg) {
             $('#messages').append($('<li>').text(msg));
         });
+        ip = getIp();
+        
         socket.on('connect', function (ip) {
-            ip = "Port: " + location.port;   
-            console.log(ip)       
-            socket.emit('reconocimiento', ip)
+            console.log(ip)
         })
     });
 </script>

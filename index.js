@@ -1,21 +1,23 @@
-const PORT = 40000
+const PORT = 3000
 var localtunnel = require('localtunnel');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const customDomain = 'p2pruebass'
-
+const customDomain = 'p2pruebasss'
+/*
 var tunnel = localtunnel(PORT, { subdomain: `${customDomain}` }, (err, tunnel) => {
+    let domain = tunnel.url
     console.log('}');
     console.log('Abierto el tunel');
+    console.log(`URL:${domain}`)
     console.log('}');
-    console.log(tunnel)
+
     tunnel.on('close', () => {
         console.log("Se te cerró, whoops")
     })
-})
+})*/
 
 //Para servir archivos 
 app.use(express.static(__dirname + '/'))
@@ -27,8 +29,6 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
     console.log('nació una araña')
-    //getLocalIp();
-    //getPublicIp();
     socket.on('chat message', function (msg) {
         io.emit('chat message', msg)
     })
@@ -36,7 +36,7 @@ io.on('connection', function (socket) {
         console.log('murió una araña')
     })
     socket.on('reconocimiento', function(ip){
-        console.log(ip);
+        console.log(`ip publica del cliente: ${ip}`);
     })
 })
 
