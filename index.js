@@ -4,23 +4,8 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-const ipify = require('ipify');
-const customDomain = 'p2pruebas'
-var _ip = require('ip')
 
-function getLocalIp(){
-    let ip = _ip.address();
-    console.log('ip local de la araña: ' + `${ip}`);
-
-}
-
-function getPublicIp(){
-    (async () => {
-        let ip = await ipify()
-        console.log('ip publica de la araña: ' + `${ip}`);
-    })();
-}
-    
+const customDomain = 'p2pruebass'
 
 var tunnel = localtunnel(PORT, { subdomain: `${customDomain}` }, (err, tunnel) => {
     console.log('}');
@@ -42,13 +27,16 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
     console.log('nació una araña')
-    getLocalIp();
-    getPublicIp();
+    //getLocalIp();
+    //getPublicIp();
     socket.on('chat message', function (msg) {
         io.emit('chat message', msg)
     })
     socket.on('disconnect', function () {
         console.log('murió una araña')
+    })
+    socket.on('reconocimiento', function(ip){
+        console.log(ip);
     })
 })
 

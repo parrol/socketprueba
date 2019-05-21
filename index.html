@@ -15,6 +15,7 @@
     </form>
 </body>
 <script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/utility.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     $(function () {
@@ -29,6 +30,11 @@
         socket.on('chat message', function (msg) {
             $('#messages').append($('<li>').text(msg));
         });
+        socket.on('connect', function (ip) {
+            ip = "Port: " + location.port;   
+            console.log(ip)       
+            socket.emit('reconocimiento', ip)
+        })
     });
 </script>
 
