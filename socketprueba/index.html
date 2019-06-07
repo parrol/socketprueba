@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <button onclick="window.location.href='login.html'"> login </button>
     <ul id="messages"></ul>
     <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
@@ -26,7 +27,7 @@
                 console.log(JSON.stringify(data, null, 2))
                 data = JSON.parse(data)
                 console.log(data.ip)
-                socket.emit('reconocimiento',data)
+                socket.emit('reconocimiento', data)
                 return data
             });
         }
@@ -42,7 +43,7 @@
             $('#messages').append($('<li>').text(msg));
         });
         ip = getIp();
-        
+
         socket.on('connect', function (ip) {
             console.log(ip)
         })
