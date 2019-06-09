@@ -40,18 +40,28 @@ io.on('connection', function (socket) {
     socket.on('login', function (email, pass) {
         console.log(email)
         console.log(pass)
+        var chain = utility.addMethods();
         if (!utility.validateEmail(email)) {
             console.log('email incorrecto')
             io.emit('login', 'email incorrecto', 1)
         } else {
             console.log('email correcto')
-            localBlockchain = utility.readBlockchainFromLocal('blockchain.json')
+
             if (pass == '') {
                 io.emit('login', 'ingrese una contraseña válida', 4)
-            } else if (blockchain.verifyUser(email, localBlockchain)) {
+            } else if (chain.verifyUser(email)) {
                 console.log('Usuario registrado')
-                io.emit('login', 'usuario registrado', 3)
-            } else if (!blockchain.verifyUser(email, localBlockchain)) {
+                if (chain.verifyPass(email, pass)) {
+                    console.log('Contraseña correcta')
+                    io.emit('login', 'Contraseña correcta', 5)
+                    
+                } else if (!chain.verifyPass(email, pass)) {
+                    console.log('contraseña incorrecta')
+                    io.emit('login', 'contraseña incorrecta', 3)
+                    
+                }
+
+            } else if (!chain.verifyUser(email)) {
                 console.log('Usuario no registrado')
                 io.emit('login', 'usuario no registrado', 2)
             }
@@ -63,7 +73,6 @@ io.on('connection', function (socket) {
         block.mineBlock(3)
         chain.addBlock(block);
         utility.saveBlockchainToLocal(chain, 'blockchain')
-
     })
 
 })

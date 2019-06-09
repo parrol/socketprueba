@@ -76,9 +76,19 @@ class Blockchain {
 
     //Devuelve verdadero si encuentra el usuario
     verifyUser(user) {
-        for(let i = 0; i< this.chain.length;i++){
-            if (this.chain[i].user == user){
+        for (let i = 0; i < this.chain.length; i++) {
+            if (this.chain[i].user == user) {
                 return true
+            }
+        }
+        return false
+    }
+    //Devuelve verdadero si la clave es correcta
+    verifyPass(user, pass) {
+        for (let i = 0; i < this.chain.length; i++) {
+            if (this.chain[i].user == user) {
+                if (this.chain[i].pass == SHA256(pass).toString())
+                    return true
             }
         }
         return false
@@ -100,8 +110,8 @@ class Blockchain {
 
 function verifyUser(user, blockchain) {
 
-    for(let i = 0; i< blockchain.chain.length;i++){
-        if (blockchain.chain[i].user == user){
+    for (let i = 0; i < blockchain.chain.length; i++) {
+        if (blockchain.chain[i].user == user) {
             return true
         }
     }
