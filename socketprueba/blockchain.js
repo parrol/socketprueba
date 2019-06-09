@@ -71,8 +71,17 @@ class Blockchain {
                 return false;
             }
         }
-
         return true;
+    }
+
+    //Devuelve verdadero si encuentra el usuario
+    verifyUser(user) {
+        for(let i = 0; i< this.chain.length;i++){
+            if (this.chain[i].user == user){
+                return true
+            }
+        }
+        return false
     }
 
     replaceChain(newChain) {
@@ -87,41 +96,47 @@ class Blockchain {
         }
 
     }
-
-    verifyUser(user){
-        this.chain.forEach(block => {
-            if(block.user == user){
-                return false //ya existe un usuario con ese nombre
-            }
-        });
-    }
-
 }
 
-//////////////MAIN//////////////
-let blockchain = new Blockchain();
-blockchain.addBlock(new Block(blockchain.lastBlock().index + 1, new Date(), 'Parra','123'));
-blockchain.addBlock(new Block(blockchain.lastBlock().index + 1, new Date(), 'Oscar','123'));
-console.log(JSON.stringify(blockchain, null, 2));
-console.log("Is blockchain valid? " + blockchain.checkValid());
-console.log('lenght1> ' + blockchain.chain.length)
+function verifyUser(user, blockchain) {
 
-let blockchain2 = new Blockchain();
-blockchain2.addBlock(new Block(blockchain2.lastBlock().index + 1, new Date(), 'rakonet','123'));
-blockchain.replaceChain(blockchain2)
-console.log(JSON.stringify(blockchain, null, 2));
-console.log("Is blockchain valid? " + blockchain2.checkValid());
-console.log('lenght1> ' + blockchain.chain.length)
+    for(let i = 0; i< blockchain.chain.length;i++){
+        if (blockchain.chain[i].user == user){
+            return true
+        }
+    }
+    return false
+}
 
 
-let block = new Block(blockchain.lastBlock().index + 1, new Date(), 'Parro','123', blockchain.lastBlock().hash)
-block.hashIsValid()
-block.mineBlock(3)
+function main() {
+    let blockchain = new Blockchain();
+    blockchain.addBlock(new Block(blockchain.lastBlock().index + 1, new Date(), 'Parra', '123'));
+    blockchain.addBlock(new Block(blockchain.lastBlock().index + 1, new Date(), 'Oscar', '123'));
+    console.log(JSON.stringify(blockchain, null, 2));
+    console.log("Is blockchain valid? " + blockchain.checkValid());
+    console.log('lenght1> ' + blockchain.chain.length)
+
+    let blockchain2 = new Blockchain();
+    blockchain2.addBlock(new Block(blockchain2.lastBlock().index + 1, new Date(), 'rakonet', '123'));
+    blockchain.replaceChain(blockchain2)
+    console.log(JSON.stringify(blockchain, null, 2));
+    console.log("Is blockchain valid? " + blockchain2.checkValid());
+    console.log('lenght1> ' + blockchain.chain.length)
 
 
+    let block = new Block(blockchain.lastBlock().index + 1, new Date(), 'Parro', '123', blockchain.lastBlock().hash)
+    block.hashIsValid()
+    block.mineBlock(3)
+}
 
 //module.exports = Block;
 module.exports = {
     Block: Block,
-    Blockchain: Blockchain
+    Blockchain: Blockchain,
+    verifyUser: verifyUser,
+    SHA256: SHA256
 }
+
+//////////////MAIN/////////////
+//main()

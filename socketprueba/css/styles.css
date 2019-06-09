@@ -52,3 +52,14 @@ form button {
 #messages li:nth-child(odd) {
     background: #eee;
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.public-chat {
+    border: solid;
+    border: #000;
+    
+}

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Login</title>
+	<title>Registro exitoso</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -35,47 +35,9 @@
 		<div class="container-login100">
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
 				<form class="login100-form validate-form" id='form'>
-					<span class="login100-form-title p-b-33">
-						Inicio de sesión
+					<span class="login100-form-title p-b-33" id='registro-exitoso'>
+						¡Registro exitoso!
 					</span>
-
-					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" name="email" placeholder="Correo" id='email'>
-						<span class="focus-input100-1"></span>
-						<span class="focus-input100-2"></span>
-					</div>
-
-					<div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="pass" placeholder="Contraseña" id='pass'>
-						<span class="focus-input100-1"></span>
-						<span class="focus-input100-2"></span>
-					</div>
-
-					<div class="container-login100-form-btn m-t-20">
-						<button class="login100-form-btn" id='iniciarSesion'>
-							Iniciar sesión
-						</button>
-					</div>
-
-					<div class="text-center p-t-45 p-b-4">
-						<span class="txt1">
-							Olvidó contraseña
-						</span>
-
-						<a href="#" class="txt2 hov1">
-							Recuperar
-						</a>
-					</div>
-
-					<div class="text-center">
-						<span class="txt1">
-							¿No tiene cuenta?
-						</span>
-
-						<a href="registro.html" class="txt2 hov1">
-							Registrarse
-						</a>
-					</div>
 				</form>
 			</div>
 		</div>
@@ -85,37 +47,16 @@
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script>
 		$(function () {
-			var socket = io()
-			socket.on('login', (msg, bool) => {
-				console.log(msg)
-				console.log(bool)
-				if (bool == 1) {
-					window.alert('Ingrese en correo válido')
-				} else if (bool == 2) {
-					window.alert('Usuario no registrado')
-				} else if (bool == 4) {
-					window.alert('Ingrese una contraseña válida')
-				} else if (bool == 3) {
-					window.location.href = 'blockchain.html'
-				}
-
-			})
-			$('#iniciarSesion').click((e) => {
-				var email = $('#email').val()
-				var pass = $('#pass').val()
-				console.log(`correo: ${email} y contraseña: ${pass}`)
-				socket.emit('login', email, pass)
-				e.preventDefault()
-			})
-			$("#index").click(() => {
-
-				let data = 'holis'
-				socket.emit('index', data)
-			})
-
-			socket.on('connect', function (ip) {
-				console.log('holis')
-			})
+			function sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			}
+			async function delay() {
+				console.log('Taking a break...');
+				await sleep(5000);
+			}
+			delay()
+			window.location.href = 'login.html'
+			
 		})
 
 	</script>

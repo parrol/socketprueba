@@ -36,7 +36,7 @@
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
 				<form class="login100-form validate-form" id='form'>
 					<span class="login100-form-title p-b-33">
-						Inicio de sesión
+						Registro
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
@@ -52,30 +52,11 @@
 					</div>
 
 					<div class="container-login100-form-btn m-t-20">
-						<button class="login100-form-btn" id='iniciarSesion'>
-							Iniciar sesión
+						<button class="login100-form-btn" id='registro'>
+							Registrarse
 						</button>
 					</div>
 
-					<div class="text-center p-t-45 p-b-4">
-						<span class="txt1">
-							Olvidó contraseña
-						</span>
-
-						<a href="#" class="txt2 hov1">
-							Recuperar
-						</a>
-					</div>
-
-					<div class="text-center">
-						<span class="txt1">
-							¿No tiene cuenta?
-						</span>
-
-						<a href="registro.html" class="txt2 hov1">
-							Registrarse
-						</a>
-					</div>
 				</form>
 			</div>
 		</div>
@@ -85,22 +66,28 @@
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script>
 		$(function () {
+			var socket = io('//192.168.42.76:3000');
 			var socket = io()
 			socket.on('login', (msg, bool) => {
 				console.log(msg)
 				console.log(bool)
 				if (bool == 1) {
 					window.alert('Ingrese en correo válido')
-				} else if (bool == 2) {
-					window.alert('Usuario no registrado')
 				} else if (bool == 4) {
 					window.alert('Ingrese una contraseña válida')
 				} else if (bool == 3) {
-					window.location.href = 'blockchain.html'
+					window.alert('Usuario ya registrado')
+				} else if (bool == 2) {
+					window.location.href = 'registro-exitoso.html'
+					var email = $('#email').val()
+					var pass = $('#pass').val()
+					socket.emit('registro', email, pass)
 				}
 
 			})
-			$('#iniciarSesion').click((e) => {
+
+			$('#registro').click((e) => {
+
 				var email = $('#email').val()
 				var pass = $('#pass').val()
 				console.log(`correo: ${email} y contraseña: ${pass}`)
@@ -111,10 +98,6 @@
 
 				let data = 'holis'
 				socket.emit('index', data)
-			})
-
-			socket.on('connect', function (ip) {
-				console.log('holis')
 			})
 		})
 
