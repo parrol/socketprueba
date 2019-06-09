@@ -5,6 +5,17 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var blockchain = require('./blockchain.js')
 var utility = require('./utility.js')
+var mutex = 1; //unlock
+const customDomain = 'ricardoasombrateporfis'
+var localtunnel = require('localtunnel');
+
+var tunnel = localtunnel(PORT, { subdomain: `${customDomain}`}, (err, tunnel) => {
+    console.log(tunnel);
+    tunnel.on('close', () => {
+        console.log("Se te cerró, ups")
+    })
+})
+
 
 app.use(express.static(__dirname + '/'))
 
