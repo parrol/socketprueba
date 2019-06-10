@@ -1,0 +1,79 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain</title>
+
+    <link rel="stylesheet" type="text/css" href="css/public.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body>
+    <button onclick="window.location.href='login.html'"> login </button>
+    <div class="grid-container">
+        <div class="grid-item left">
+            <div class="flex-container1">
+                <div class="folder">
+                    1
+                </div>
+                <div class="folder">
+                    2
+                </div>
+            </div>
+        </div>
+        <div class="grid-item right">
+            <div class='flex-container'>
+
+                <div class="public-chat">
+                    <div id="messages">
+                        <ul id="messages"></ul>
+                    </div>
+
+                    <form action="">
+                        <input id="m" autocomplete="off" /><button>Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script>
+    $(function () {
+        var socket = io('//192.168.42.76:3000');
+
+        var socket = io()
+        var ip;
+
+        function getIp() {
+            $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function (data) {
+                console.log(JSON.stringify(data, null, 2))
+                data = JSON.parse(data)
+                console.log(data.ip)
+                socket.emit('reconocimiento', data)
+                return data
+            });
+        }
+        //presiona send y se activa el submit
+        $('form').submit(function (e) {
+            e.preventDefault(); // prevents page reloading
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+
+        socket.on('chat message', function (msg) {
+            $('#messages').append($('<li>').text(msg));
+        });
+        ip = getIp();
+
+        socket.on('connect', function (ip) {
+            console.log('holis')
+        })
+    });
+</script>
+
+</html>
