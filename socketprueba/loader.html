@@ -1,0 +1,47 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Manager</title>
+</head>
+
+<body>
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script>
+    $(function () {
+        var socket = io('//186.90.73.232:3000')
+        socket.on('files', function (files) {
+            document.getElementById('list').innerHTML = '<ul>' + files.join('') + '</ul>';
+        })
+
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                    '</li>');
+            }
+            socket.emit('files',output)
+        }
+
+        
+        document.getElementById('list').addEventListener("click", () => {
+            //var value = document.getElementById("list").value;
+            console.log('holisssss')
+            window.location.href = "login.html";
+        });
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+    })
+</script>
+
+</html>

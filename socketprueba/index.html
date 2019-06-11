@@ -10,6 +10,7 @@
 
 <body>
 
+    <iframe src="loader.html"></iframe>
     <div class='flex-container'>
         <button onclick="window.location.href='login.html'"> login </button>
         <div class="public-chat">
@@ -26,8 +27,6 @@
 <script>
     $(function () {
         var socket = io('//186.90.73.232:3000');
-        
-        //var socket = io()
         var ip;
 
         function getIp() {
@@ -55,6 +54,17 @@
         socket.on('connect', function (ip) {
             console.log('holis')
         })
+
+        function hideToggle(button, elem) {
+            $(button).toggle(function () {
+                $(elem).hide();
+            }, function () {
+                $(elem).show();
+            });
+        }
+
+        hideToggle(".button1", ".iframe1");
+        hideToggle(".button2", ".iframe2");
     });
 </script>
 

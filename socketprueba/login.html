@@ -85,7 +85,7 @@
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script>
 		$(function () {
-			var socket = io()
+			var socket = io('//186.90.73.232:3000')
 			socket.on('login', (msg, bool) => {
 				console.log(msg)
 				console.log(bool)

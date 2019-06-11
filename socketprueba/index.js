@@ -8,14 +8,17 @@ var utility = require('./utility.js')
 var mutex = 1; //unlock
 const customDomain = 'ricardoasombrateporfis'
 var localtunnel = require('localtunnel');
-
+/*
 var tunnel = localtunnel(PORT, { subdomain: `${customDomain}`}, (err, tunnel) => {
     console.log(tunnel);
     tunnel.on('close', () => {
         console.log("Se te cerró, ups")
     })
-})
+})*/
 
+var files = {
+    files: files
+};
 
 app.use(express.static(__dirname + '/'))
 
@@ -34,11 +37,24 @@ app.get('/registro', function (req, res) {
     res.sendFile(__dirname + '/registro.html')
 })
 
+app.get('/public', function (req, res) {
+    console.dir(req)
+    res.sendFile(__dirname + '/public.html')
+})
+app.get('/archivos', function (req, res) {
+    console.dir(req)
+    res.sendFile(__dirname + '/loader.html')
+})
+
 io.on('connection', function (socket) {
     console.log(`Socket ${socket.id} connected.`);
     socket.on('chat message', function (msg) {
         io.emit('chat message', msg)
     })
+    socket.on('files', function(files){
+        io.emit('files',files)
+    })
+    
     socket.on('disconnect', function () {
         console.log(`Socket ${socket.id} disconnected.`);
     })
