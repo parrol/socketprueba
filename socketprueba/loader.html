@@ -16,13 +16,32 @@
 <script src="js/jquery-3.4.1.min.js"></script>
 <script>
     $(function () {
-        var socket = io('//186.90.73.232:3000')
+        var text;
+        console.log('ajaaa' + text);
+        
+        var files = {
+            files: 'Aquí saldrá el archivo'
+        };
+        var socket;
+        socket = io.connect('http://186.90.73.232:3000');
+
         socket.on('files', function (files) {
             document.getElementById('list').innerHTML = '<ul>' + files.join('') + '</ul>';
         })
 
-        function handleFileSelect(evt) {
-            var files = evt.target.files; // FileList object
+        function openFile(event) {
+            var input = event.target;
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                text = reader.result;
+                console.log(reader.result.substring(0, 200));
+            };
+            text = reader.readAsText(input.files[0]);
+        };
+
+        function handleFileSelect(event) {
+            var files = event.target.files; // FileList object
             var output = [];
             for (var i = 0, f; f = files[i]; i++) {
                 output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
@@ -30,16 +49,20 @@
                     f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                     '</li>');
             }
-            socket.emit('files',output)
+            var data = {
+                files: output
+            };
+            socket.emit('files', output)
         }
 
-        
+
         document.getElementById('list').addEventListener("click", () => {
             //var value = document.getElementById("list").value;
             console.log('holisssss')
             window.location.href = "login.html";
         });
         document.getElementById('files').addEventListener('change', handleFileSelect, false);
+        document.getElementById('files').addEventListener('change', openFile, false);
 
     })
 </script>

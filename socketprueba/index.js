@@ -1,24 +1,21 @@
 const PORT = 3000
 var express = require('express');
+var socket = require('socket.io');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var server = app.listen(process.env.PORT || PORT);
+var io = socket(server);
 var blockchain = require('./blockchain.js')
 var utility = require('./utility.js')
-var mutex = 1; //unlock
-const customDomain = 'ricardoasombrateporfis'
-var localtunnel = require('localtunnel');
-/*
-var tunnel = localtunnel(PORT, { subdomain: `${customDomain}`}, (err, tunnel) => {
-    console.log(tunnel);
-    tunnel.on('close', () => {
-        console.log("Se te cerró, ups")
-    })
-})*/
 
 var files = {
     files: files
 };
+
+var text = {
+    text: ''
+};
+
+var holis = 'holiss'
 
 app.use(express.static(__dirname + '/'))
 
@@ -45,16 +42,40 @@ app.get('/archivos', function (req, res) {
     console.dir(req)
     res.sendFile(__dirname + '/loader.html')
 })
+app.get('/text-editor', function (req, res) {
+    console.dir(req)
+    res.sendFile(__dirname + '/text-editor.html')
+})
 
-io.on('connection', function (socket) {
-    console.log(`Socket ${socket.id} connected.`);
+io.sockets.on('connection', connection);
+
+function connection(socket) {
+    console.log('a new user with id ' + socket.id + " has entered");
+
+    //////////////////////////////////////
+    //--------------TEXTO---------------//
+    socket.emit('newUser', text);
+    socket.emit('initialize', holis);
+
+    socket.on('text', handleTextSent);
+
+
+    function handleTextSent(data){
+        text.text = data.text
+        io.sockets.emit('text', data);
+    }
+
+
     socket.on('chat message', function (msg) {
         io.emit('chat message', msg)
     })
-    socket.on('files', function(files){
-        io.emit('files',files)
-    })
-    
+    socket.on('files', handleUploadedFiles)
+
+    function handleUploadedFiles(data) {
+        files.files = data.file
+        io.emit('files', data);
+    }
+
     socket.on('disconnect', function () {
         console.log(`Socket ${socket.id} disconnected.`);
     })
@@ -81,11 +102,11 @@ io.on('connection', function (socket) {
                 if (chain.verifyPass(email, pass)) {
                     console.log('Contraseña correcta')
                     io.emit('login', 'Contraseña correcta', 5)
-                    
+
                 } else if (!chain.verifyPass(email, pass)) {
                     console.log('contraseña incorrecta')
                     io.emit('login', 'contraseña incorrecta', 3)
-                    
+
                 }
 
             } else if (!chain.verifyUser(email)) {
@@ -101,13 +122,12 @@ io.on('connection', function (socket) {
         chain.addBlock(block);
         utility.saveBlockchainToLocal(chain, 'blockchain')
     })
-
-})
-
+}
+/*
 http.listen(3000, "0.0.0.0", () => {
     console.log(`listening on *:${PORT}`)
 });
-
+*/
 /////////////////////////////////FROALA//////////////////
 /*io.sockets.on('connection', connection);
 

@@ -59,7 +59,7 @@ form button {
     display: flex;
     flex-direction: row;
     height: 100%;
-    background: red;
+    background: lightblue;
 }
 
 .public-chat {
